@@ -2,14 +2,20 @@ package org.firstinspires.ftc.teamcode.Teleop;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
+
 
 public class IntakeSubmersible {
     DcMotor motor;
-    CRServo CRservo;
+    CRServo pivotCRServo;
+    Servo rightServo;
+    Servo leftServo;
     // class constructor
-    public IntakeSubmersible(DcMotor subMotor, CRServo subCRServo){
+    public IntakeSubmersible(DcMotor subMotor, CRServo pivotCRServo, Servo rightServo, Servo leftServo){
         this.motor = subMotor; // reinit motors for use within class functions.
-        this.CRservo = subCRServo;
+        this.pivotCRServo = pivotCRServo;
+        this.rightServo = rightServo;
+        this.leftServo = leftServo;
     }
 
     public void moveSubMotorTicks(int ticksToBeMoved, double power){
@@ -20,7 +26,18 @@ public class IntakeSubmersible {
     public double subMotorTicks() {
         return motor.getCurrentPosition();
     }
-    public void moveSubServo(double power){
-        CRservo.setPower(power);
+
+    public void moveSubCRServo(double power)
+    {
+        pivotCRServo.setPower(power);
     }
+    public void setServos(double pos) {
+        rightServo.setPosition(pos);
+        leftServo.setPosition(1 - pos);
+    }
+    public void servosFreeze() {
+        rightServo.setPosition(rightServo.getPosition());
+        leftServo.setPosition(leftServo.getPosition());
+    }
+
 }

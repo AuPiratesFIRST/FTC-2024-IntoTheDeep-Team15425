@@ -5,6 +5,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
@@ -65,7 +66,9 @@ public abstract class Base extends LinearOpMode {
         rightBack.setDirection(DcMotor.Direction.REVERSE);
 
 
-        CRServo subCRServo = hardwareMap.get(CRServo.class, "Sub CRServo");
+        CRServo pivotCRServo = hardwareMap.get(CRServo.class, "Sub Pivot CRServo");
+        Servo rightServo = hardwareMap.get(Servo.class, "Sub Right Servo");
+        Servo leftServo = hardwareMap.get(Servo.class, "Sub Left Servo");
 
         DcMotor chamMotor = hardwareMap.get(DcMotor.class, "Cham Motor");
         chamMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -76,7 +79,7 @@ public abstract class Base extends LinearOpMode {
 
         // Init Module class
         climbingModule = new Climbing(climbingMotor);
-        intakeSubmersibleModule = new IntakeSubmersible(subMotor, subCRServo);
+        intakeSubmersibleModule = new IntakeSubmersible(subMotor, pivotCRServo, rightServo, leftServo);
         intakeChamberModule = new IntakeChamber(chamMotor, chamCRServo);
         drivingModule = new DrivingSystem(imu, leftFront, leftBack, rightFront, rightBack);
     }

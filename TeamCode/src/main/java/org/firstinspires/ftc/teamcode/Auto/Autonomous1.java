@@ -164,9 +164,9 @@ public class Autonomous1 extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        //driveAction.build(),
-                        lift.liftUp(),
-                        lift.liftDown()
+                        driveAction.build()//a,
+//                        lift.liftUp(),
+//                        lift.liftDown()
                 )
         );
     }
