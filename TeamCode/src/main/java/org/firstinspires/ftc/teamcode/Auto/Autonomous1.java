@@ -119,7 +119,7 @@ public class Autonomous1 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d initialPose = new Pose2d(60, 36, Math.toRadians(90));
+        Pose2d initialPose = new Pose2d(60, -36, Math.PI);
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         double chamberLength = 27.5;
         double robotWidth = 12.375/2;

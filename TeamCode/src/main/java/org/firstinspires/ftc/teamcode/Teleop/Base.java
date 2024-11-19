@@ -81,7 +81,7 @@ public abstract class Base extends LinearOpMode {
         climbingModule = new Climbing(climbingMotor);
         intakeSubmersibleModule = new IntakeSubmersible(subMotor, pivotCRServo, rightServo, leftServo);
         intakeChamberModule = new IntakeChamber(chamMotor, chamCRServo);
-        drivingModule = new DrivingSystem(imu, leftFront, leftBack, rightFront, rightBack);
+        drivingModule = new DrivingSystem(imu, rightFront, leftFront, rightBack, leftBack);
     }
 
     //Utility Functions
