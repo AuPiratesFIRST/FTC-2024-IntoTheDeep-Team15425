@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "CompetitionTeleop", group = "IntoTheDeep2024")
 
-public class TeleopPearls2024 extends Base { // extends base instead of linearopmode
+public class TeleopPearls2024 extends Base { // extends base instead of LinearOpMode
 
     @Override
     public void runOpMode() throws InterruptedException {
