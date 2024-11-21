@@ -75,12 +75,12 @@ public abstract class Base extends LinearOpMode {
         chamMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-        CRServo chamCRServo = hardwareMap.get(CRServo.class, "Cham CRServo");
+        Servo chamServo = hardwareMap.get(Servo.class, "Cham Servo");
 
         // Init Module class
         climbingModule = new Climbing(climbingMotor);
         intakeSubmersibleModule = new IntakeSubmersible(subMotor, pivotCRServo, rightServo, leftServo);
-        intakeChamberModule = new IntakeChamber(chamMotor, chamCRServo);
+        intakeChamberModule = new IntakeChamber(chamMotor, chamServo);
         drivingModule = new DrivingSystem(imu, rightFront, leftFront, rightBack, leftBack);
     }
 
