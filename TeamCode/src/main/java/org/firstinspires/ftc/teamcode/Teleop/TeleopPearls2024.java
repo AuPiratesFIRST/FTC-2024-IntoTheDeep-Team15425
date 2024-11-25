@@ -1,11 +1,22 @@
 package org.firstinspires.ftc.teamcode.Teleop;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org. firstinspires. ftc. teamcode. Teleop.Base;
 
 @TeleOp(name = "CompetitionTeleop", group = "IntoTheDeep2024")
 
-public class TeleopPearls2024 extends Base { // extends base instead of linearopmode
+@Config
+public class TeleopPearls2024 extends Base { // extends base instead of linearopmode 
+    public static double GROUND_POS = -0.8;
+    public static int chamUpPos = 245;
+    public static double climbingPower = 0.6;
+    public static double chamPower = 0.5;
+    public static double subMotorPower = 0.4;
+    public static double chamServoEjectPower = 0.5;
+    public static double chamServoIntakePower = -0.5;
+    public static double climbingPressurePower = 0.3;
+
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -19,27 +30,19 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
 
         int startPos = 0;
 
-        int chamUpPos = 245;
-
         int subExtendedPos = -1800;
         int subMotorStowPos = -210;
         int snatchStage = 0;
         double subServosDeadBand = 0.05;
 
 
-        double climbingPower = 0.6;
-        double chamPower = 0.5;
-        double subMotorPower = 0.4;
-        double chamServoEjectPower = 0.5;
-        double chamServoIntakePower = -0.5;
+
         double intakeDeadBand = 5;
-        double climbingPressurePower = 0.3;
 
         double subClawServosClosePos = 0;
         double subClawServosOpenPos = 0.5;
 
         double subCRServoStowPos = 0.5;
-        double groundPos = -0.8;
 
         String currentPivotPos = "Stow";
 
@@ -162,7 +165,7 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
             }
             else if (snatchStage == 1) {
                 intakeSubmersibleModule.moveSubMotorTicks(subExtendedPos, subMotorPower);
-                intakeSubmersibleModule.moveSubCRServo(groundPos);
+                intakeSubmersibleModule.moveSubCRServo(GROUND_POS);
                 currentPivotPos = "Ground";
                 if (Math.abs(intakeSubmersibleModule.subMotorTicks()) > Math.abs(subMotorStowPos)) {
                     snatchStage = 2;
@@ -196,12 +199,12 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
             }
             //automated reeling in
             else if (gamepad2.y) {
-                intakeSubmersibleModule.moveSubCRServo(groundPos);
+                intakeSubmersibleModule.moveSubCRServo(GROUND_POS);
                 currentPivotPos = "Ground";
                 intakeSubmersibleModule.moveSubMotorTicks(subExtendedPos, subMotorPower);
             }
             //claw
-            else if (currentPivotPos == "Ground") {
+            else if (currentPivotPos.equals("Ground")) {
                 if(gamepad2.left_trigger > deadBand){
                     intakeSubmersibleModule.setServos(subClawServosOpenPos);
                 }

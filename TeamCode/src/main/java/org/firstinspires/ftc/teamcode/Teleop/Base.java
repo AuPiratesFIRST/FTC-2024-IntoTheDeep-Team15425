@@ -24,7 +24,6 @@ public abstract class Base extends LinearOpMode {
     public DrivingSystem drivingModule = null;
 
     // Global Variables
-    public int exampleVariable = 0;
 
     // Initialize Hardware Function
     public void initHardware() throws InterruptedException {
