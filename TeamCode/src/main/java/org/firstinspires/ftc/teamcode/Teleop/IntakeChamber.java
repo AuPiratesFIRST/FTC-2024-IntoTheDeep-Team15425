@@ -20,10 +20,11 @@ public class IntakeChamber {
     public void stopChamMotor(){
         motor.setPower(0);
     }
-    public double ChamMotorTicks() {
+    public double chamMotorTicks() {
         return motor.getCurrentPosition();
     }
     public void moveChamServo(double power){
         CRservo.setPower(power);
     }
+    public void stopChamServo() {CRservo.setPower(0);}
 }

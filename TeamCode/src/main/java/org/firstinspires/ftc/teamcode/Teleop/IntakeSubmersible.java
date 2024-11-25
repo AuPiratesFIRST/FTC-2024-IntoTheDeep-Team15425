@@ -10,6 +10,7 @@ public class IntakeSubmersible {
     CRServo pivotCRServo;
     Servo rightServo;
     Servo leftServo;
+
     // class constructor
     public IntakeSubmersible(DcMotor subMotor, CRServo pivotCRServo, Servo rightServo, Servo leftServo){
         this.motor = subMotor; // reinit motors for use within class functions.
@@ -38,6 +39,14 @@ public class IntakeSubmersible {
     public void servosFreeze() {
         rightServo.setPosition(rightServo.getPosition());
         leftServo.setPosition(leftServo.getPosition());
+    }
+    public boolean servosAtPosition(double targetPosition, double deadBand){
+        if (rightServo.getPosition() > targetPosition - deadBand && rightServo.getPosition() < targetPosition + deadBand && 1 - leftServo.getPosition() > targetPosition - deadBand && 1 - leftServo.getPosition() < targetPosition + deadBand) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 }
