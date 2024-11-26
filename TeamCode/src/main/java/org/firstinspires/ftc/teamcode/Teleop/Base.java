@@ -20,7 +20,6 @@ public abstract class Base extends LinearOpMode {
     // Module Classes
     public Climbing climbingModule = null;
     public IntakeSubmersible intakeSubmersibleModule = null;
-    public IntakeChamber intakeChamberModule = null;
     public DrivingSystem drivingModule = null;
 
     // Global Variables
@@ -66,20 +65,15 @@ public abstract class Base extends LinearOpMode {
 
 
         CRServo pivotCRServo = hardwareMap.get(CRServo.class, "Sub Pivot CRServo");
-        Servo rightServo = hardwareMap.get(Servo.class, "Sub Right Servo");
-        Servo leftServo = hardwareMap.get(Servo.class, "Sub Left Servo");
+        Servo rightSubServo = hardwareMap.get(Servo.class, "Sub Right Servo");
+        Servo leftSubServo = hardwareMap.get(Servo.class, "Sub Left Servo");
+        Servo rightClimbingServo = hardwareMap.get(Servo.class, "Climbing Right Servo");
+        Servo leftClimbingServo = hardwareMap.get(Servo.class, "Climbing Left Servo");
 
-        DcMotor chamMotor = hardwareMap.get(DcMotor.class, "Cham Motor");
-        chamMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        chamMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        CRServo chamCRServo = hardwareMap.get(CRServo.class, "Cham CRServo");
 
         // Init Module class
-        climbingModule = new Climbing(climbingMotor);
-        intakeSubmersibleModule = new IntakeSubmersible(subMotor, pivotCRServo, rightServo, leftServo);
-        intakeChamberModule = new IntakeChamber(chamMotor, chamCRServo);
+        climbingModule = new Climbing(climbingMotor, rightClimbingServo, leftClimbingServo);
+        intakeSubmersibleModule = new IntakeSubmersible(subMotor, pivotCRServo, rightSubServo, leftSubServo);
         drivingModule = new DrivingSystem(imu, rightFront, leftFront, rightBack, leftBack);
     }
 

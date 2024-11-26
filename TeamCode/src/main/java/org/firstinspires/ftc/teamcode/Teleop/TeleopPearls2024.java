@@ -8,14 +8,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @Config
 public class TeleopPearls2024 extends Base { // extends base instead of linearopmode 
     public static double GROUND_POS = -0.8;
-    public static int chamUpPos = 245;
     public static double climbingPower = 0.6;
-    public static double chamPower = 0.5;
     public static double subMotorPower = 0.4;
-    public static double chamServoEjectPower = 0.5;
-    public static double chamServoIntakePower = -0.5;
     public static double climbingPressurePower = 0.3;
-
+    public static double climbingRightServoOpenPos = 0.5;
+    public static double climbingRightServoClosePos = 0.4;
+    public static double climbingLeftServoOpenPos = 1-0.5;
+    public static double climbingLeftServoClosePos = 0.4;
 
 
     @Override
@@ -131,30 +130,17 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                 }
             }
 
-            //cham motor
-            if(gamepad2.x) {
-                intakeChamberModule.moveChamMotorTicks(chamUpPos, chamPower);
-                if (intakeChamberModule.motor.getCurrentPosition() > chamUpPos - intakeDeadBand && intakeChamberModule.motor.getCurrentPosition() < chamUpPos + intakeDeadBand) {
-                    intakeChamberModule.moveChamServo(chamServoEjectPower);
-                }
-            }
-            else if(gamepad2.b) {
-                intakeChamberModule.moveChamMotorTicks(startPos, chamPower);
-                intakeChamberModule.stopChamServo();
-            }
-            else{
-                intakeChamberModule.stopChamMotor();
-                intakeChamberModule.stopChamServo();
-            }
             //bumpers
             if (gamepad2.left_bumper) {
-                intakeChamberModule.moveChamServo(chamServoIntakePower);
+                climbingModule.setRightServo(climbingRightServoClosePos);
+                climbingModule.setLeftServo(climbingLeftServoClosePos);
             }
             else if (gamepad2.right_bumper) {
-                intakeChamberModule.moveChamServo(chamServoEjectPower);
+                climbingModule.setRightServo(climbingRightServoOpenPos);
+                climbingModule.setLeftServo(climbingLeftServoOpenPos);
             }
             else {
-                intakeChamberModule.stopChamServo();
+                climbingModule.servosFreeze();
             }
 
             
@@ -228,20 +214,18 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
             double adjustedHeading = drivingModule.adjustHeading();
 
             //telemetry
-            telemetry.addLine("Program is running");
             telemetry.addData("Climbing Motor Position: ", climbingModule.climbingMotorTicks());
             telemetry.addData("Sub Motor Position: ", intakeSubmersibleModule.subMotorTicks());
             telemetry.addData("Heading: ", drivingModule.angle);
             telemetry.addData("AdjustedHeading: ", adjustedHeading);
-            telemetry.addData("Right Servo Pos", intakeSubmersibleModule.rightServo.getPosition());
-            telemetry.addData("Left Servo Pos", intakeSubmersibleModule.leftServo.getPosition());
+            telemetry.addData("Right Servo Sub Pos", intakeSubmersibleModule.rightServo.getPosition());
+            telemetry.addData("Left Servo Sub Pos", intakeSubmersibleModule.leftServo.getPosition());
             telemetry.addData("right trigger", gamepad2.right_trigger);
             telemetry.addData("left trigger", gamepad2.left_trigger);
             telemetry.addData("restPos", doRestingPos);
             telemetry.addData("dPad left", gamepad1.dpad_left);
             telemetry.addData("currentPivotPos", currentPivotPos);
             telemetry.addData("subMotorPos", intakeSubmersibleModule.subMotorTicks());
-            telemetry.addData("chamMotorPos", intakeChamberModule.chamMotorTicks());
             telemetry.addData("snatch stage", snatchStage);
             telemetry.addData("servoIsOpen", intakeSubmersibleModule.servosAtPosition(subClawServosOpenPos, subServosDeadBand));
             telemetry.addData("servoIsClosed", intakeSubmersibleModule.servosAtPosition(subClawServosClosePos, subServosDeadBand));
