@@ -15,6 +15,7 @@ public class DrivingSystem {
     DcMotor leftBack;
     BNO055IMU imu;
     double heading;
+    double offsetHeading = 0;
     double angle;
 
 
@@ -24,7 +25,6 @@ public class DrivingSystem {
         this.rightFront = rightFront;
         this.rightBack = rightBack;
         this.leftBack = leftBack;
-        this.heading = heading;
         this.imu = imu;
     }
 
@@ -65,47 +65,7 @@ public class DrivingSystem {
 
         gyroAngle = -1 * gyroAngle;
         //Disables gyro, sets to -Math.PI/2 so front is defined correctly
-//        if( right_bumper ) {
-//            gyroAngle = -halfPi;
-//        }
 
-        /*
-         * Checking power value for out of range
-         */
-            /*
-commented out because not need anymore
-            if (flw > 1) {
-                flw = 1;
-            } else if (flw < -1) {
-                flw = -1;
-            }
-
-            if (blw > 1) {
-                blw = 1;
-            } else if (blw < -1) {
-                blw = -1;
-            }
-
-            if (frw > 1) {
-                frw = 1;
-            } else if (frw < -1) {
-                frw = -1;
-            }
-
-            if (brw > 1) {
-                brw = 1;
-            } else if (brw < -1) {
-                brw = -1;
-            }
-            */
-
-        // Move below power calculations
-            
-           /* leftFront.setPower(flw);
-            leftBack.setPower(blw);
-            rightFront.setPower(frw);
-            rightBack.setPower(brw);
-            */
 
         theta = Math.atan2(stickY, stickX) - gyroAngle - halfPi;
         cValue = Math.sqrt(Math.pow(stickX, 2) + Math.pow(stickY, 2));
@@ -130,17 +90,22 @@ commented out because not need anymore
      *
      * EXTRA: maybe this can be automatically
      */
+    public void resetAngle() {
+        offsetHeading = getHeading();
+    }
 
-
-    public double adjustHeading(){
+    private double getHeading() {
         double currentHeading = angle;
         if ( currentHeading < -180 ) {
             currentHeading = currentHeading + 360;
         } else if ( currentHeading > 180 ) {
             currentHeading = currentHeading - 360;
         }
+        return currentHeading;
+    }
 
-        heading = currentHeading;
+    public double adjustHeading(){
+        heading = getHeading() - offsetHeading;
         return heading;
     }
     public void updateAngle(){
