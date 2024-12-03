@@ -12,10 +12,10 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
     public static double climbingPower = 0.6;
     public static double subMotorPower = 0.4;
     public static double climbingPressurePower = 0.3;
-    public static double climbingRightServoOpenPos = 0.5;
-    public static double climbingRightServoClosePos = 0.18;
-    public static double climbingLeftServoOpenPos = 0.5;
-    public static double climbingLeftServoClosePos = 0.65;
+    public static double climbingRightServoOpenPos = 0.35;
+    public static double climbingRightServoClosePos = 0.24;
+    public static double climbingLeftServoOpenPos = 0.4;
+    public static double climbingLeftServoClosePos = 0.59;
     public static double waitToGround = 0.5;
     public static double waitToRelease = 1;
     public static double waitToClose = 1.3;
@@ -97,6 +97,10 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                     doRestingPos = 0;
                 }
                 climbingModule.moveClimbingMotorTicks(climbingSpecimenHangPos, climbingPower);
+                if (climbingModule.climbingMotorTicks() < climbingSpecimenHangPos + 2) {
+                    climbingModule.setLeftServo(climbingLeftServoOpenPos);
+                    climbingModule.setRightServo(climbingRightServoOpenPos);
+                }
             }
             else if(gamepad2.dpad_left) {
                 if(doRestingPos == 0) {

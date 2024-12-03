@@ -6,7 +6,6 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -19,8 +18,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
-@Autonomous(name = "Autonomous1", group = "Autonomous")
-public class Autonomous1 extends LinearOpMode {
+@Autonomous(name = "Autonomous2", group = "Autonomous")
+public class Autonomous2 extends LinearOpMode {
     public class Climbing {
         private DcMotorEx climbingMotor;
         private Servo rightClimbingServo;
@@ -61,6 +60,7 @@ public class Autonomous1 extends LinearOpMode {
             return new ClimbingUp();
         }
 
+
         public class ClimbingDown implements Action {
             private boolean initialized = false;
 
@@ -80,8 +80,6 @@ public class Autonomous1 extends LinearOpMode {
                 if (!(pos > -10 && pos < 5)) {
                     return true;
                 } else {
-                    climbingMotor.setPower(0);
-                    climbingMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
                     return false;
                 }
             }
@@ -89,11 +87,42 @@ public class Autonomous1 extends LinearOpMode {
         public Action climbingMotorDown(){
             return new ClimbingDown();
         }
+
+        public class ClimbingSpecimenDown implements Action {
+            private boolean initialized = false;
+            private int climbingSpecimenHangPos = 1125;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    climbingMotor.setTargetPosition(climbingSpecimenHangPos);
+                    climbingMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    climbingMotor.setPower(0.6);
+                    initialized = true;
+                }
+
+                double pos = climbingMotor.getCurrentPosition();
+                packet.put("climbingMotorPos", pos);
+                telemetry.addData("Climbing Pos", pos);
+                telemetry.update();
+                if (!(pos < climbingSpecimenHangPos + 5 && pos > climbingSpecimenHangPos - 5)) {
+                    return true;
+                } else {
+                    climbingMotor.setPower(0);
+                    climbingMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+                    return false;
+                }
+            }
+        }
+        public Action climbingMotorSpecimenDown(){
+            return new ClimbingSpecimenDown();
+        }
+
         public class ClimbingRelease implements Action {
-            private double climbingRightServoOpenPos = 0.5;
-            private double climbingRightServoClosePos = 0.18;
-            private double climbingLeftServoOpenPos = 0.5;
-            private double climbingLeftServoClosePos = 0.65;
+            private double climbingRightServoOpenPos = 0.35;
+            private double climbingRightServoClosePos = 0.24;
+            private double climbingLeftServoOpenPos = 0.4;
+            private double climbingLeftServoClosePos = 0.59;
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 rightClimbingServo.setPosition(climbingRightServoOpenPos);
@@ -101,15 +130,16 @@ public class Autonomous1 extends LinearOpMode {
                 return false;
             }
         }
+
         public Action climbingRelease(){
             return new ClimbingRelease();
         }
 
         public class ClimbingClose implements Action {
-            private double climbingRightServoOpenPos = 0.5;
-            private double climbingRightServoClosePos = 0.18;
-            private double climbingLeftServoOpenPos = 0.5;
-            private double climbingLeftServoClosePos = 0.65;
+            private double climbingRightServoOpenPos = 0.35;
+            private double climbingRightServoClosePos = 0.24;
+            private double climbingLeftServoOpenPos = 0.4;
+            private double climbingLeftServoClosePos = 0.59;
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 rightClimbingServo.setPosition(climbingRightServoClosePos);
@@ -120,6 +150,8 @@ public class Autonomous1 extends LinearOpMode {
         public Action climbingClose(){
             return new ClimbingClose();
         }
+
+
     }
 
 
@@ -175,10 +207,10 @@ public class Autonomous1 extends LinearOpMode {
         TrajectoryActionBuilder driveAction2 = drive.actionBuilder(new Pose2d(ascentZoneLength/2 + robotWidth, chamberLength/4, Math.PI/2))
                 .setTangent(-Math.PI/4)
                 //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
-                .splineToLinearHeading(new Pose2d(ascentZoneLength/2 + robotWidth, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI)
-                .splineToLinearHeading(new Pose2d(ascentZoneLength/4, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI);
+                .splineToLinearHeading(new Pose2d(ascentZoneLength/2 + robotWidth, -chamberLength/2 - robotWidth -12, Math.PI), Math.PI)
+                .splineToLinearHeading(new Pose2d(ascentZoneLength/4, -chamberLength/2 - robotWidth, Math.PI), Math.PI);
 //                .build());
-                //.build();)
+        //.build();)
 
 //        Action trajectoryActionCloseOut = driveAction.fresh()//New action!
 //                //.strafeTo(new Vector2d(48, 12))//go to that position
@@ -205,12 +237,17 @@ public class Autonomous1 extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                    climbing.climbingClose(),
-                    new ParallelAction(climbing.climbingMotorUp(),
-                            driveAction.build()),
-                    climbing.climbingMotorDown()
-
-                )
+                        climbing.climbingClose(),
+                        new ParallelAction(climbing.climbingMotorUp(),
+                                driveAction.build()),
+                        climbing.climbingMotorSpecimenDown(),
+                        climbing.climbingRelease(),
+                        //climbing.climbingMotorDown()
+                        //driveAction2.build(),
+                        new ParallelAction(climbing.climbingMotorUp(),
+                                driveAction2.build()),
+                        climbing.climbingMotorDown()
+                                )
         );
     }
 }
