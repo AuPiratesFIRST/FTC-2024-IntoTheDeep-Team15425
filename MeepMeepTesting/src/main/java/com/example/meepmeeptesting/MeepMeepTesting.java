@@ -16,16 +16,16 @@ public class MeepMeepTesting {
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 13.4860433896)
+                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 12.375)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(60, -36, Math.PI/2 + Math.PI/2))
-                .splineTo(new Vector2d(ascentZoneLength/2 + robotWidth, chamberLength/4), Math.PI - Math.PI/2)
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-60, 36, 0))
+                .splineTo(new Vector2d(ascentZoneLength/2 + robotWidth, chamberLength/4), -Math.PI/2)
 
-                .setTangent(-Math.PI/4)
+                .setTangent(Math.PI/4)
                 //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
-                .splineToLinearHeading(new Pose2d(ascentZoneLength/2 + robotWidth, -chamberLength/2 - robotWidth - 12, Math.PI), Math.PI)
-                .splineToLinearHeading(new Pose2d(ascentZoneLength/4, -chamberLength/2 - robotWidth, Math.PI), Math.PI)
+                .splineToLinearHeading(new Pose2d(ascentZoneLength/2 + robotWidth, -chamberLength/2 - robotWidth - 12, 0), 0)
+                .splineToLinearHeading(new Pose2d(0, -chamberLength/2 - robotWidth, 0), 0)
 //            .splineToConstantHeading(new Vector2d(ascentZoneLength/2 + robotWidth, chamberLength/4), Math.PI)
 //            .setTangent(-Math.PI/4)
 //            //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
