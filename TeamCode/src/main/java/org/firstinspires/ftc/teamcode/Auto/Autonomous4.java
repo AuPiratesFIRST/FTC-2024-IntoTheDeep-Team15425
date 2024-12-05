@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -18,9 +19,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
-@Autonomous(name = "Autonomous1", group = "Autonomous")
-public class Autonomous1 extends LinearOpMode {
-    public static double offsetAmount = -0.5;
+@Autonomous(name = "Autonomous4", group = "Autonomous")
+public class Autonomous4 extends LinearOpMode {
     public class Climbing {
         private DcMotorEx climbingMotor;
         private Servo rightClimbingServo;
@@ -188,7 +188,7 @@ public class Autonomous1 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d initialPose = new Pose2d(-60, 36, 0);
+        Pose2d initialPose = new Pose2d(-60, -36, 0);
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         double chamberLength = 27.5;
         double robotWidth = 12.375/2;
@@ -202,14 +202,14 @@ public class Autonomous1 extends LinearOpMode {
 //                //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
 //                .splineToLinearHeading(new Pose2d(ascentZoneLength/2 + robotWidth, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI)
 //                .splineToLinearHeading(new Pose2d(ascentZoneLength/4, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI);
-        TrajectoryActionBuilder driveAction = drive.actionBuilder(new Pose2d(-60, 36, 0))
-                .splineToLinearHeading(new Pose2d(-(ascentZoneLength/2 + robotWidth - 3 + offsetAmount), -(chamberLength/4) + 15, -Math.PI/2), 0);
+        TrajectoryActionBuilder driveAction = drive.actionBuilder(new Pose2d(-60, -36, 0))
+                .splineToLinearHeading(new Pose2d(-(ascentZoneLength/2 + robotWidth - 5), -(chamberLength/4), -Math.PI/2), -Math.PI/2);
 
         TrajectoryActionBuilder driveAction2 = drive.actionBuilder(new Pose2d(-(ascentZoneLength/2 + robotWidth + 2), -(chamberLength/4), -Math.PI/2))
                 //.setTangent(-Math.PI/4)
                 //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
                 .splineToConstantHeading(new Vector2d(-(ascentZoneLength/2 + robotWidth - 5), 50), Math.PI/2)
-                .splineToConstantHeading(new Vector2d(ascentZoneLength/2 + 26, -(-14.5 - 12.9/2)), -Math.PI/2);
+                .splineToConstantHeading(new Vector2d(ascentZoneLength/2 -6, -(-14.5 - 12.9/2)), -Math.PI/2);
 //                .build());
         //.build();)
 
@@ -243,6 +243,7 @@ public class Autonomous1 extends LinearOpMode {
                                 driveAction.build()),
                         climbing.climbingMotorSpecimenDown(),
                         climbing.climbingRelease(),
+                        new SleepAction(0.5),
                         //climbing.climbingMotorDown()
                         //driveAction2.build(),
                         new ParallelAction(climbing.climbingMotorUp(),

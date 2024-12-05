@@ -18,9 +18,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
-@Autonomous(name = "Autonomous1", group = "Autonomous")
-public class Autonomous1 extends LinearOpMode {
-    public static double offsetAmount = -0.5;
+@Autonomous(name = "Autonomous3", group = "Autonomous")
+public class Autonomous3 extends LinearOpMode {
     public class Climbing {
         private DcMotorEx climbingMotor;
         private Servo rightClimbingServo;
@@ -202,8 +201,8 @@ public class Autonomous1 extends LinearOpMode {
 //                //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
 //                .splineToLinearHeading(new Pose2d(ascentZoneLength/2 + robotWidth, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI)
 //                .splineToLinearHeading(new Pose2d(ascentZoneLength/4, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI);
-        TrajectoryActionBuilder driveAction = drive.actionBuilder(new Pose2d(-60, 36, 0))
-                .splineToLinearHeading(new Pose2d(-(ascentZoneLength/2 + robotWidth - 3 + offsetAmount), -(chamberLength/4) + 15, -Math.PI/2), 0);
+        TrajectoryActionBuilder driveAction = drive.actionBuilder(new Pose2d(-60, -36, 0))
+                .splineTo(new Vector2d(-(ascentZoneLength/2 + robotWidth - 2), -(chamberLength/4) + 15), -Math.PI/2);
 
         TrajectoryActionBuilder driveAction2 = drive.actionBuilder(new Pose2d(-(ascentZoneLength/2 + robotWidth + 2), -(chamberLength/4), -Math.PI/2))
                 //.setTangent(-Math.PI/4)

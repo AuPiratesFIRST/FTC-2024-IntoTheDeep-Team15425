@@ -187,7 +187,7 @@ public class Autonomous2 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d initialPose = new Pose2d(60, -36, Math.PI);
+        Pose2d initialPose = new Pose2d(-60, 36, 0);
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         double chamberLength = 27.5;
         double robotWidth = 12.375/2;
@@ -201,14 +201,14 @@ public class Autonomous2 extends LinearOpMode {
 //                //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
 //                .splineToLinearHeading(new Pose2d(ascentZoneLength/2 + robotWidth, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI)
 //                .splineToLinearHeading(new Pose2d(ascentZoneLength/4, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI);
-        TrajectoryActionBuilder driveAction = drive.actionBuilder(new Pose2d(60, -36, Math.PI/2))
-                .splineToConstantHeading(new Vector2d(ascentZoneLength/2 + robotWidth, chamberLength/4), Math.PI);
+        TrajectoryActionBuilder driveAction = drive.actionBuilder(new Pose2d(-60, 36, 0))
+                .splineTo(new Vector2d(-(ascentZoneLength/2 + robotWidth - 5), -(chamberLength/4) ), -Math.PI/2);
 
-        TrajectoryActionBuilder driveAction2 = drive.actionBuilder(new Pose2d(ascentZoneLength/2 + robotWidth, chamberLength/4, Math.PI/2))
-                .setTangent(-Math.PI/4)
+        TrajectoryActionBuilder driveAction2 = drive.actionBuilder(new Pose2d(-(ascentZoneLength/2 + robotWidth + 2), -(chamberLength/4), -Math.PI/2))
+                //.setTangent(-Math.PI/4)
                 //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
-                .splineToLinearHeading(new Pose2d(ascentZoneLength/2 + robotWidth, -chamberLength/2 - robotWidth -12, Math.PI), Math.PI)
-                .splineToLinearHeading(new Pose2d(ascentZoneLength/4, -chamberLength/2 - robotWidth, Math.PI), Math.PI);
+                .splineToConstantHeading(new Vector2d(-(ascentZoneLength/2 + robotWidth - 5), 50), Math.PI/2)
+                .splineToConstantHeading(new Vector2d(ascentZoneLength/2 -6, -(-14.5 - 12.9/2)), -Math.PI/2);
 //                .build());
         //.build();)
 
@@ -245,8 +245,7 @@ public class Autonomous2 extends LinearOpMode {
                         //climbing.climbingMotorDown()
                         //driveAction2.build(),
                         new ParallelAction(climbing.climbingMotorUp(),
-                                driveAction2.build()),
-                        climbing.climbingMotorDown()
+                                driveAction2.build())
                                 )
         );
     }
