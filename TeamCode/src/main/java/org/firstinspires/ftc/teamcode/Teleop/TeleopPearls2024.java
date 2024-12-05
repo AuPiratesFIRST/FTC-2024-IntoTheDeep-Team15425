@@ -20,6 +20,7 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
     public static double waitToRelease = 1;
     public static double waitToClose = 1.3;
     public static double waitToStow = 1.7;
+    public static double motorPower = -0.2;
 
 
     @Override
@@ -190,7 +191,9 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                 climbingModule.servosFreeze();
             }
 
-            
+            if (gamepad1.start) {
+                climbingModule.resetMotor(motorPower);
+            }
 
             //automated snatching of sample
             if (gamepad2.back && snatchStage == 0 && climbingModule.climbingMotorTicks() >= Math.abs(intRestingPos) - intakeDeadBand) {

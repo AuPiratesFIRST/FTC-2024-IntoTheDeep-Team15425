@@ -39,5 +39,9 @@ public class Climbing {
         rightServo.setPosition(rightServo.getPosition());
         leftServo.setPosition(leftServo.getPosition());
     }
+    public void resetMotor(double motorPower) {
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setPower(motorPower);
+    }
 
 }
