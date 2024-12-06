@@ -21,6 +21,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Config
 @Autonomous(name = "Autonomous4", group = "Autonomous")
 public class Autonomous4 extends LinearOpMode {
+    public static double offset = 2;
     public class Climbing {
         private DcMotorEx climbingMotor;
         private Servo rightClimbingServo;
@@ -203,10 +204,12 @@ public class Autonomous4 extends LinearOpMode {
 //                .splineToLinearHeading(new Pose2d(ascentZoneLength/2 + robotWidth, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI)
 //                .splineToLinearHeading(new Pose2d(ascentZoneLength/4, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI);
         TrajectoryActionBuilder driveAction = drive.actionBuilder(new Pose2d(-60, -36, 0))
-                .splineToLinearHeading(new Pose2d(-(ascentZoneLength/2 + robotWidth - 5), -(chamberLength/4), -Math.PI/2), -Math.PI/2);
-
+                .setTangent(Math.PI/2)
+                .splineToLinearHeading(new Pose2d(-(ascentZoneLength/2 + robotWidth - 5) - offset, -(chamberLength/4), -Math.PI/2), 0);
         TrajectoryActionBuilder driveAction2 = drive.actionBuilder(new Pose2d(-(ascentZoneLength/2 + robotWidth + 2), -(chamberLength/4), -Math.PI/2))
                 //.setTangent(-Math.PI/4)
+                .setTangent(Math.PI)
+
                 //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
                 .splineToConstantHeading(new Vector2d(-(ascentZoneLength/2 + robotWidth - 5), 50), Math.PI/2)
                 .splineToConstantHeading(new Vector2d(ascentZoneLength/2 -6, -(-14.5 - 12.9/2)), -Math.PI/2);

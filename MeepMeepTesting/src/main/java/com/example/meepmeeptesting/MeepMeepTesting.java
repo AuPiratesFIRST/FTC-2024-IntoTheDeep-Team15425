@@ -31,6 +31,7 @@ public class MeepMeepTesting {
 
                 //.setTangent(-Math.PI/4)
                 //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
+                        .setTangent(Math.PI)
                 .splineToConstantHeading(new Vector2d(-(ascentZoneLength/2 + robotWidth - 5), 50), Math.PI/2)
                 .splineToConstantHeading(new Vector2d(ascentZoneLength/2 + 26, -(-14.5 - 12.9/2)), -Math.PI/2)
 //            .splineToConstantHeading(new Vector2d(ascentZoneLength/2 + robotWidth, chamberLength/4), Math.PI)
@@ -39,11 +40,16 @@ public class MeepMeepTesting {
 //            .splineToLinearHeading(new Pose2d(ascentZoneLength/2 + robotWidth, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI)
 //            .splineToLinearHeading(new Pose2d(ascentZoneLength/4, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI)
             .build());
-        myBot2.runAction(myBot.getDrive().actionBuilder(new Pose2d(-60, -36, 0))                                .splineToLinearHeading(new Pose2d(-(ascentZoneLength/2 + robotWidth - 5), -(chamberLength/4), -Math.PI/2), -Math.PI/2)
+        myBot2.runAction(myBot.getDrive().actionBuilder(new Pose2d(-60, -36, 0))
+                        .setTangent(Math.PI/2)
+                .splineToLinearHeading(new Pose2d(-(ascentZoneLength/2 + robotWidth - 5) - 2, -(chamberLength/4), -Math.PI/2), 0)
 
+                //.setTangent(-Math.PI/4)
+                //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
+                        .setTangent(Math.PI)
                 .splineToConstantHeading(new Vector2d(-(ascentZoneLength/2 + robotWidth - 5), 50), Math.PI/2)
                 .splineToConstantHeading(new Vector2d(ascentZoneLength/2 -6, -(-14.5 - 12.9/2)), -Math.PI/2)
-                                .build());
+                        .build());
 
 //        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, -0, 0))
 //                .splineTo(new Vector2d(0, 30), 0)
