@@ -22,7 +22,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Config
 @Autonomous(name = "RightChamber/Start, SampleGrab", group = "Autonomous")
 public class Autonomous5 extends LinearOpMode {
-    public static double offset = -2.4;
+    public static double offset = -5;
+    public static double offset2 = 8;
+    public static double degreesToRotate = 130;
     public class Climbing {
         private DcMotorEx climbingMotor;
         private Servo rightClimbingServo;
@@ -238,13 +240,15 @@ public class Autonomous5 extends LinearOpMode {
         TrajectoryActionBuilder driveAction = drive.actionBuilder(new Pose2d(-60, -36, 0))
                 .setTangent(Math.PI/2)
                 .splineToLinearHeading(new Pose2d(-(ascentZoneLength/2 + robotWidth - 5) - offset, -(chamberLength/4), -Math.PI/2), 0);
-        TrajectoryActionBuilder driveAction2 = drive.actionBuilder(new Pose2d(-35.5, -47.5, 0))
+        TrajectoryActionBuilder driveAction2 = drive.actionBuilder(new Pose2d(-35.5, -47.5 - offset2, Math.PI))
                 //.setTangent(-Math.PI/4)
                 .setTangent(Math.PI)
                 .splineToConstantHeading(new Vector2d(-58, -58), -Math.PI/2);
         TrajectoryActionBuilder driveAction3 = drive.actionBuilder(new Pose2d(-(ascentZoneLength/2 + robotWidth + 2), -(chamberLength/4), -Math.PI/2))
                 .setTangent(Math.PI)
-                .splineToLinearHeading(new Pose2d(-35.5, -47.5, 0), 0);
+                .splineToLinearHeading(new Pose2d(-35.5, -47.5 - offset2, 0), 0);
+        TrajectoryActionBuilder rotate = drive.actionBuilder(new Pose2d(-35.5, -47.5 - offset2, 0))
+                .splineToLinearHeading(new Pose2d(-35.5, -47.49 - offset2, Math.PI/180 * degreesToRotate), 0);
 
 //                .build());
         //.build();)
@@ -281,8 +285,7 @@ public class Autonomous5 extends LinearOpMode {
                         climbing.climbingRelease(),
                         new SleepAction(0.5),
                         //climbing.climbingMotorDown()
-                        //driveAction2.build(),
-
+                        driveAction3.build(),
 
                        climbing.climbingMotorSpecimenDown(),
                         intakeSub.lowerPivot(),
@@ -297,6 +300,20 @@ public class Autonomous5 extends LinearOpMode {
                         new SleepAction(0.6),
                         intakeSub.stowPivot(),
                         new SleepAction(0.5),
+                        rotate.build(),
+                        climbing.climbingMotorSpecimenDown(),
+                        intakeSub.lowerPivot(),
+                        new SleepAction(0.6),
+                        intakeSub.openClaw(),
+                        intakeSub.openClaw(),
+
+                        new SleepAction(0.5),
+                        intakeSub.closeClaw(),
+                        intakeSub.closeClaw(),
+
+                        new SleepAction(0.6),
+                        intakeSub.stowPivot(),
+                        new SleepAction(10),
                         driveAction2.build()
                 )
         );

@@ -48,6 +48,7 @@ public class MeepMeepTesting {
                 //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
                         .setTangent(Math.PI)
                 .splineToLinearHeading(new Pose2d(-35.5, -47.5, 0), 0)
+                .splineToLinearHeading(new Pose2d(-35.5, -47.5, Math.PI), 0)
 
                         .setTangent(Math.PI)
                 .splineToConstantHeading(new Vector2d(-58, -58), -Math.PI/2)
