@@ -19,9 +19,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
-@Autonomous(name = "Autonomous4", group = "Autonomous")
+@Autonomous(name = "AllRightAuto(Ascent)", group = "Autonomous")
 public class Autonomous4 extends LinearOpMode {
-    public static double offset = 2;
+    public static double offset = -2.4;
+    public static double offset2 = 2;
     public class Climbing {
         private DcMotorEx climbingMotor;
         private Servo rightClimbingServo;
@@ -122,9 +123,9 @@ public class Autonomous4 extends LinearOpMode {
 
         public class ClimbingRelease implements Action {
             private double climbingRightServoOpenPos = 0.35;
-            private double climbingRightServoClosePos = 0.24;
+            private double climbingRightServoClosePos = 0.18;
             private double climbingLeftServoOpenPos = 0.4;
-            private double climbingLeftServoClosePos = 0.59;
+            private double climbingLeftServoClosePos = 0.48;
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 rightClimbingServo.setPosition(climbingRightServoOpenPos);
@@ -139,9 +140,9 @@ public class Autonomous4 extends LinearOpMode {
 
         public class ClimbingClose implements Action {
             private double climbingRightServoOpenPos = 0.35;
-            private double climbingRightServoClosePos = 0.24;
+            private double climbingRightServoClosePos = 0.18;
             private double climbingLeftServoOpenPos = 0.4;
-            private double climbingLeftServoClosePos = 0.59;
+            private double climbingLeftServoClosePos = 0.48;
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 rightClimbingServo.setPosition(climbingRightServoClosePos);
@@ -212,7 +213,8 @@ public class Autonomous4 extends LinearOpMode {
 
                 //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
                 .splineToConstantHeading(new Vector2d(-(ascentZoneLength/2 + robotWidth - 5), 50), Math.PI/2)
-                .splineToConstantHeading(new Vector2d(ascentZoneLength/2 -6, -(-14.5 - 12.9/2)), -Math.PI/2);
+                .splineToConstantHeading(new Vector2d(ascentZoneLength/2 -6, 50), 0)
+                .splineToConstantHeading(new Vector2d(ascentZoneLength/2 -6, -(-14.5 - 12.9/2) + offset2), -Math.PI/2);
 //                .build());
         //.build();)
 

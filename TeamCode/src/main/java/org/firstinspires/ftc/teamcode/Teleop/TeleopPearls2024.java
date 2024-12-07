@@ -8,9 +8,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
 public class TeleopPearls2024 extends Base { // extends base instead of linearopmode 
+    public static double GROUND_POS_UNEXTENDED = -0.84;
     public static double GROUND_POS = -0.7;
     public static double climbingPower = 0.6;
-    public static double subMotorPower = 0.4;
+    public static double subMotorPower = 0.6;
     public static double climbingPressurePower = 0.3;
     public static double climbingRightServoOpenPos = 0.35;
     public static double climbingRightServoClosePos = 0.18;
@@ -27,7 +28,7 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
     public void runOpMode() throws InterruptedException {
 
         //init variables
-        int climbingUpPos = 1500;
+        int climbingUpPos = 1565;
         int climbingPressurePos = 500;
         int climbingSpecimenHangPos = 1125;
         double doubleRestingPos = (double)climbingUpPos * 0.35;
@@ -98,7 +99,7 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                     doRestingPos = 0;
                 }
                 climbingModule.moveClimbingMotorTicks(climbingSpecimenHangPos, climbingPower);
-                if (climbingModule.climbingMotorTicks() < climbingSpecimenHangPos + 2) {
+                if (climbingModule.climbingMotorTicks() < climbingSpecimenHangPos + 20) {
                     climbingModule.setLeftServo(climbingLeftServoOpenPos);
                     climbingModule.setRightServo(climbingRightServoOpenPos);
                 }
@@ -191,7 +192,10 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                 climbingModule.servosFreeze();
             }
 
-            if (gamepad1.start) {
+            if (gamepad1.back) {
+                climbingModule.resetMotor(motorPower);
+            }
+            else if (gamepad2.back) {
                 climbingModule.resetMotor(motorPower);
             }
 
@@ -261,10 +265,14 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                 }
 
             }
-            else if (gamepad2.b) {
+            else if (gamepad2.right_stick_y > 0.2) {
                 intakeSubmersibleModule.setServos(subClawServosClosePos);
                 intakeSubmersibleModule.moveSubCRServo(subCRServoStowPos);
                 currentPivotPos = "Stow";
+            }
+            else if (gamepad2.right_stick_y < -0.2 && climbingModule.climbingMotorTicks() > 200) {
+                intakeSubmersibleModule.moveSubCRServo(GROUND_POS_UNEXTENDED);
+                currentPivotPos = "Ground";
             }
             //claw
             else if (currentPivotPos.equals("Ground")) {

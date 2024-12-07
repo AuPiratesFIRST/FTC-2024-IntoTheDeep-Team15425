@@ -12,6 +12,7 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -19,8 +20,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
-@Autonomous(name = "RightChamber/Start, Observation", group = "Autonomous")
-public class Autonomous3 extends LinearOpMode {
+@Autonomous(name = "RightChamber/Start, SampleGrab", group = "Autonomous")
+public class Autonomous5 extends LinearOpMode {
     public static double offset = -2.4;
     public class Climbing {
         private DcMotorEx climbingMotor;
@@ -157,35 +158,65 @@ public class Autonomous3 extends LinearOpMode {
     }
 
 
-//    public class Claw {
-//        private Servo claw;
-//
-//        public Claw(HardwareMap hardwareMap) {
-//            claw = hardwareMap.get(Servo.class, "claw");
-//        }
-//
-//        public class CloseClaw implements Action {
-//            @Override
-//            public boolean run(@NonNull TelemetryPacket packet) {
-//                claw.setPosition(0.55);
-//                return false;
-//            }
-//        }
-//        public Action closeClaw() {
-//            return new CloseClaw();
-//        }
-//
-//        public class OpenClaw implements Action {
-//            @Override
-//            public boolean run(@NonNull TelemetryPacket packet) {
-//                claw.setPosition(1.0);
-//                return false;
-//            }
-//        }
-//        public Action openClaw() {
-//            return new OpenClaw();
-//        }
-//    }
+    public class IntakeSub {
+        private Servo rightSubServo;
+        private Servo leftSubServo;
+        private CRServo pivotCRServo;
+        private double subClawServosClosePos = 0;
+        private double subClawServosOpenPos = 0.5;
+
+        public IntakeSub(HardwareMap hardwareMap) {
+            rightSubServo = hardwareMap.get(Servo.class, "Sub Right Servo");
+            leftSubServo = hardwareMap.get(Servo.class, "Sub Left Servo");
+            pivotCRServo = hardwareMap.get(CRServo.class, "Sub Pivot CRServo");
+        }
+
+        public class CloseClaw implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                rightSubServo.setPosition(subClawServosClosePos);
+                leftSubServo.setPosition(1 - subClawServosClosePos);
+                return false;
+            }
+        }
+        public Action closeClaw() {
+            return new CloseClaw();
+        }
+
+        public class OpenClaw implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                rightSubServo.setPosition(subClawServosOpenPos);
+                leftSubServo.setPosition(1 - subClawServosOpenPos);
+                return false;
+            }
+        }
+        public Action openClaw() {
+            return new OpenClaw();
+        }
+
+        public class LowerPivot implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                pivotCRServo.setPower(-0.84);
+                return false;
+            }
+        }
+        public Action lowerPivot() {
+            return new LowerPivot();
+        }
+        public class StowPivot implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                pivotCRServo.setPower(0.5);
+                return false;
+            }
+        }
+        public Action stowPivot() {
+            return new StowPivot();
+        }
+
+    }
 
     @Override
     public void runOpMode() {
@@ -195,6 +226,7 @@ public class Autonomous3 extends LinearOpMode {
         double robotWidth = 12.375/2;
         double ascentZoneLength = 42.75;
         Climbing climbing = new Climbing(hardwareMap);
+        IntakeSub intakeSub = new IntakeSub(hardwareMap);
 
 
 //        TrajectoryActionBuilder driveAction = drive.actionBuilder(initialPose)
@@ -206,10 +238,14 @@ public class Autonomous3 extends LinearOpMode {
         TrajectoryActionBuilder driveAction = drive.actionBuilder(new Pose2d(-60, -36, 0))
                 .setTangent(Math.PI/2)
                 .splineToLinearHeading(new Pose2d(-(ascentZoneLength/2 + robotWidth - 5) - offset, -(chamberLength/4), -Math.PI/2), 0);
-        TrajectoryActionBuilder driveAction2 = drive.actionBuilder(new Pose2d(-(ascentZoneLength/2 + robotWidth + 2), -(chamberLength/4), -Math.PI/2))
+        TrajectoryActionBuilder driveAction2 = drive.actionBuilder(new Pose2d(-35.5, -47.5, 0))
                 //.setTangent(-Math.PI/4)
                 .setTangent(Math.PI)
                 .splineToConstantHeading(new Vector2d(-58, -58), -Math.PI/2);
+        TrajectoryActionBuilder driveAction3 = drive.actionBuilder(new Pose2d(-(ascentZoneLength/2 + robotWidth + 2), -(chamberLength/4), -Math.PI/2))
+                .setTangent(Math.PI)
+                .splineToLinearHeading(new Pose2d(-35.5, -47.5, 0), 0);
+
 //                .build());
         //.build();)
 
@@ -246,8 +282,24 @@ public class Autonomous3 extends LinearOpMode {
                         new SleepAction(0.5),
                         //climbing.climbingMotorDown()
                         //driveAction2.build(),
-                                driveAction2.build()
+
+
+                       climbing.climbingMotorSpecimenDown(),
+                        intakeSub.lowerPivot(),
+                        new SleepAction(0.6),
+                        intakeSub.openClaw(),
+                        intakeSub.openClaw(),
+
+                        new SleepAction(0.5),
+                        intakeSub.closeClaw(),
+                        intakeSub.closeClaw(),
+
+                        new SleepAction(0.6),
+                        intakeSub.stowPivot(),
+                        new SleepAction(0.5),
+                        driveAction2.build()
                 )
         );
+
     }
 }

@@ -18,9 +18,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
-@Autonomous(name = "Autonomous1", group = "Autonomous")
+@Autonomous(name = "LeftChamber/Start, Observation", group = "Autonomous")
 public class Autonomous1 extends LinearOpMode {
-    public static double offsetAmount = -0.5;
     public class Climbing {
         private DcMotorEx climbingMotor;
         private Servo rightClimbingServo;
@@ -121,9 +120,9 @@ public class Autonomous1 extends LinearOpMode {
 
         public class ClimbingRelease implements Action {
             private double climbingRightServoOpenPos = 0.35;
-            private double climbingRightServoClosePos = 0.24;
+            private double climbingRightServoClosePos = 0.18;
             private double climbingLeftServoOpenPos = 0.4;
-            private double climbingLeftServoClosePos = 0.59;
+            private double climbingLeftServoClosePos = 0.48;
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 rightClimbingServo.setPosition(climbingRightServoOpenPos);
@@ -138,9 +137,9 @@ public class Autonomous1 extends LinearOpMode {
 
         public class ClimbingClose implements Action {
             private double climbingRightServoOpenPos = 0.35;
-            private double climbingRightServoClosePos = 0.24;
+            private double climbingRightServoClosePos = 0.18;
             private double climbingLeftServoOpenPos = 0.4;
-            private double climbingLeftServoClosePos = 0.59;
+            private double climbingLeftServoClosePos = 0.48;
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 rightClimbingServo.setPosition(climbingRightServoClosePos);
@@ -203,13 +202,12 @@ public class Autonomous1 extends LinearOpMode {
 //                .splineToLinearHeading(new Pose2d(ascentZoneLength/2 + robotWidth, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI)
 //                .splineToLinearHeading(new Pose2d(ascentZoneLength/4, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI);
         TrajectoryActionBuilder driveAction = drive.actionBuilder(new Pose2d(-60, 36, 0))
-                .splineToLinearHeading(new Pose2d(-(ascentZoneLength/2 + robotWidth - 3 + offsetAmount), -(chamberLength/4) + 15, -Math.PI/2), 0);
+                .splineTo(new Vector2d(-(ascentZoneLength/2 + robotWidth - 5), -(chamberLength/4) ), -Math.PI/2);
 
         TrajectoryActionBuilder driveAction2 = drive.actionBuilder(new Pose2d(-(ascentZoneLength/2 + robotWidth + 2), -(chamberLength/4), -Math.PI/2))
                 //.setTangent(-Math.PI/4)
-                //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
-                .splineToConstantHeading(new Vector2d(-(ascentZoneLength/2 + robotWidth - 5), 50), Math.PI/2)
-                .splineToConstantHeading(new Vector2d(ascentZoneLength/2 + 26, -(-14.5 - 12.9/2)), -Math.PI/2);
+                .setTangent(Math.PI)
+                .splineToConstantHeading(new Vector2d(-58, -58), -Math.PI/2);
 //                .build());
         //.build();)
 
@@ -245,9 +243,10 @@ public class Autonomous1 extends LinearOpMode {
                         climbing.climbingRelease(),
                         //climbing.climbingMotorDown()
                         //driveAction2.build(),
-                        new ParallelAction(climbing.climbingMotorUp(),
-                                driveAction2.build())
+
+                                driveAction2.build()
                 )
+
         );
     }
 }
