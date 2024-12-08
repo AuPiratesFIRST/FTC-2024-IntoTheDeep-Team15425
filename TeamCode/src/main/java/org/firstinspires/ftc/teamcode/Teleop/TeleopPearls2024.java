@@ -256,7 +256,7 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                     timer.reset();
                 }
                 else if (time <= waitToGround) {
-                    intakeSubmersibleModule.moveSubCRServo(GROUND_POS);
+                    intakeSubmersibleModule.moveSubCRServo(GROUND_POS_UNEXTENDED);
                     currentPivotPos = "Ground";
                 }
                 else if (time <= waitToRelease) {
