@@ -41,7 +41,7 @@ public class Autonomous3 extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    climbingMotor.setTargetPosition(1500);
+                    climbingMotor.setTargetPosition(1550);
                     climbingMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     climbingMotor.setPower(0.6);
                     initialized = true;
@@ -51,7 +51,7 @@ public class Autonomous3 extends LinearOpMode {
                 packet.put("climbingMotorPos", pos);
                 telemetry.addData("Climbing Pos", pos);
                 telemetry.update();
-                if (pos < 1490) {
+                if (pos < 1540) {
                     return true;
                 } else {
                     return false;
@@ -220,6 +220,7 @@ public class Autonomous3 extends LinearOpMode {
 
         // actions that need to happen on init; for instance, a claw tightening.
         //Actions.runBlocking(claw.closeClaw());
+        Actions.runBlocking(climbing.climbingClose());
 
 
 //        while (!isStopRequested() && !opModeIsActive()) {

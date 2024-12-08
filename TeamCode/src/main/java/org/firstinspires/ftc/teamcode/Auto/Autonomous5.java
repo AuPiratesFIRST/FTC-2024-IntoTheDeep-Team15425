@@ -24,6 +24,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Autonomous5 extends LinearOpMode {
     public static double offset = -5;
     public static double offset2 = 8;
+    public static double offset3 = -2;
     public static double degreesToRotate = 130;
     public class Climbing {
         private DcMotorEx climbingMotor;
@@ -44,7 +45,7 @@ public class Autonomous5 extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    climbingMotor.setTargetPosition(1500);
+                    climbingMotor.setTargetPosition(1550);
                     climbingMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     climbingMotor.setPower(0.6);
                     initialized = true;
@@ -54,7 +55,7 @@ public class Autonomous5 extends LinearOpMode {
                 packet.put("climbingMotorPos", pos);
                 telemetry.addData("Climbing Pos", pos);
                 telemetry.update();
-                if (pos < 1490) {
+                if (pos < 1540) {
                     return true;
                 } else {
                     return false;
@@ -246,12 +247,18 @@ public class Autonomous5 extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(-58, -58), -Math.PI/2);
         TrajectoryActionBuilder driveAction3 = drive.actionBuilder(new Pose2d(-(ascentZoneLength/2 + robotWidth + 2), -(chamberLength/4), -Math.PI/2))
                 .setTangent(Math.PI)
-                .splineToLinearHeading(new Pose2d(-35.5, -47.5 - offset2, 0), 0);
-        TrajectoryActionBuilder rotate = drive.actionBuilder(new Pose2d(-35.5, -47.5 - offset2, 0))
+                .splineToLinearHeading(new Pose2d(-35.5 - offset3, -47.5 - offset2, 0), 0);
+        TrajectoryActionBuilder rotate = drive.actionBuilder(new Pose2d(-35.5 - offset3, -47.5 - offset2, 0))
                 .splineToLinearHeading(new Pose2d(-35.5, -47.49 - offset2, Math.PI/180 * degreesToRotate), 0);
+        TrajectoryActionBuilder specimenDrive = drive.actionBuilder(new Pose2d(-35.5, -47.49 - offset2, Math.PI/180 * degreesToRotate))
+                .splineToLinearHeading(new Pose2d(-62, -47.49 - offset2, Math.PI/2), 0);
+        TrajectoryActionBuilder finalMove = drive.actionBuilder(new Pose2d(-60, -47.49 - offset2, Math.PI/2))
+                .setTangent(Math.PI/2)
+                .splineToLinearHeading(new Pose2d(-(ascentZoneLength/2 + robotWidth - 5) - offset + 2, -(chamberLength/4), -Math.PI/2), 0);
 
 //                .build());
         //.build();)
+        Actions.runBlocking(climbing.climbingClose());
 
 //        Action trajectoryActionCloseOut = driveAction.fresh()//New action!
 //                //.strafeTo(new Vector2d(48, 12))//go to that position
@@ -313,8 +320,16 @@ public class Autonomous5 extends LinearOpMode {
 
                         new SleepAction(0.6),
                         intakeSub.stowPivot(),
-                        new SleepAction(10),
-                        driveAction2.build()
+                        new SleepAction(5),
+                        climbing.climbingMotorDown(),
+                        //driveAction2.build()
+                        specimenDrive.build(),
+                        climbing.climbingClose(),
+                        new SleepAction(0.6),
+                        new ParallelAction(climbing.climbingMotorSpecimenDown(), finalMove.build()),
+                        climbing.climbingMotorDown(),
+                        climbing.climbingRelease()
+
                 )
         );
 

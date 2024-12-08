@@ -22,7 +22,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Autonomous(name = "AllRightAuto(Ascent)", group = "Autonomous")
 public class Autonomous4 extends LinearOpMode {
     public static double offset = -2.4;
-    public static double offset2 = 2;
+    public static double offset2 = -15;
     public class Climbing {
         private DcMotorEx climbingMotor;
         private Servo rightClimbingServo;
@@ -42,7 +42,7 @@ public class Autonomous4 extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    climbingMotor.setTargetPosition(1500);
+                    climbingMotor.setTargetPosition(1550);
                     climbingMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     climbingMotor.setPower(0.6);
                     initialized = true;
@@ -52,7 +52,7 @@ public class Autonomous4 extends LinearOpMode {
                 packet.put("climbingMotorPos", pos);
                 telemetry.addData("Climbing Pos", pos);
                 telemetry.update();
-                if (pos < 1490) {
+                if (pos < 1540) {
                     return true;
                 } else {
                     return false;
@@ -212,8 +212,8 @@ public class Autonomous4 extends LinearOpMode {
                 .setTangent(Math.PI)
 
                 //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
-                .splineToConstantHeading(new Vector2d(-(ascentZoneLength/2 + robotWidth - 5), 50), Math.PI/2)
-                .splineToConstantHeading(new Vector2d(ascentZoneLength/2 -6, 50), 0)
+                .splineToConstantHeading(new Vector2d(-(ascentZoneLength/2 + robotWidth - 5), 26), Math.PI/2)
+                .splineToConstantHeading(new Vector2d(ascentZoneLength/2 -6, 26), 0)
                 .splineToConstantHeading(new Vector2d(ascentZoneLength/2 -6, -(-14.5 - 12.9/2) + offset2), -Math.PI/2);
 //                .build());
         //.build();)
@@ -224,7 +224,7 @@ public class Autonomous4 extends LinearOpMode {
         //Sorry I marked this up- please delete if you want
 
         // actions that need to happen on init; for instance, a claw tightening.
-        //Actions.runBlocking(claw.closeClaw());
+        Actions.runBlocking(climbing.climbingClose());
 
 
 //        while (!isStopRequested() && !opModeIsActive()) {

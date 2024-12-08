@@ -8,14 +8,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
 public class TeleopPearls2024 extends Base { // extends base instead of linearopmode 
-    public static double GROUND_POS_UNEXTENDED = -0.84;
-    public static double GROUND_POS = -0.7;
+    public static double GROUND_POS_UNEXTENDED = -0.9;
+    public static double GROUND_POS = -0.8;
     public static double climbingPower = 0.6;
     public static double subMotorPower = 0.6;
     public static double climbingPressurePower = 0.3;
     public static double climbingRightServoOpenPos = 0.35;
     public static double climbingRightServoClosePos = 0.18;
-    public static double climbingLeftServoOpenPos = 0.4;
+    public static double climbingLeftServoOpenPos = 0.3;
     public static double climbingLeftServoClosePos = 0.48;
     public static double waitToGround = 0.5;
     public static double waitToRelease = 1;
@@ -28,7 +28,7 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
     public void runOpMode() throws InterruptedException {
 
         //init variables
-        int climbingUpPos = 1565;
+        int climbingUpPos = 1555;
         int climbingPressurePos = 500;
         int climbingSpecimenHangPos = 1125;
         double doubleRestingPos = (double)climbingUpPos * 0.35;
@@ -250,7 +250,7 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                 currentPivotPos = "Ground";
                 intakeSubmersibleModule.moveSubMotorTicks(subExtendedPos, subMotorPower);
             }
-            else if (gamepad2.x) {
+            else if (gamepad2.x && climbingModule.climbingMotorTicks() > 200) {
                 if (!timerIsActivated) {
                     timerIsActivated = true;
                     timer.reset();

@@ -32,7 +32,7 @@ public class MeepMeepTesting {
                 //.setTangent(-Math.PI/4)
                 //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
                         .setTangent(Math.PI)
-                .splineToConstantHeading(new Vector2d(-(ascentZoneLength/2 + robotWidth - 5), 50), Math.PI/2)
+                .splineToConstantHeading(new Vector2d(-(ascentZoneLength/2 + robotWidth - 5), 26), Math.PI/2)
                 .splineToConstantHeading(new Vector2d(ascentZoneLength/2 + 26, -(-14.5 - 12.9/2)), -Math.PI/2)
 //            .splineToConstantHeading(new Vector2d(ascentZoneLength/2 + robotWidth, chamberLength/4), Math.PI)
 //            .setTangent(-Math.PI/4)
