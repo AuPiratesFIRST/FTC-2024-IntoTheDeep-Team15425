@@ -28,7 +28,7 @@ public class DrivingSystem {
         this.imu = imu;
     }
 
-    public void driveTheMotors(float right_stick_x, float right_stick_y, float left_stick_x, float left_stick_y) {
+    public void driveTheMotors(float right_stick_x, float right_stick_y, float left_stick_x, float left_stick_y, boolean toggledSpeed) {
 
 
         //this can be divided by any number but we chose 4
@@ -73,10 +73,19 @@ public class DrivingSystem {
         pX = cValue * (Math.sin(theta + quarterPi));
         pY = cValue * (Math.sin(theta - quarterPi));
 
-        leftFront.setPower((pY - protate) * 1.5);
-        leftBack.setPower((pX - protate) * 1.5);
-        rightFront.setPower((pX + protate) * 1.5);
-        rightBack.setPower((pY + protate) * 1.5);
+        if (!toggledSpeed) {
+            leftFront.setPower((pY - protate) * 1.5);
+            leftBack.setPower((pX - protate) * 1.5);
+            rightFront.setPower((pX + protate) * 1.5);
+            rightBack.setPower((pY + protate) * 1.5);
+        }
+        else {
+            leftFront.setPower(((pY - protate) * 1.5)/2);
+            leftBack.setPower(((pX - protate) * 1.5)/2);
+            rightFront.setPower(((pX + protate) * 1.5)/2);
+            rightBack.setPower(((pY + protate) * 1.5)/2);
+        }
+
 
     }
 

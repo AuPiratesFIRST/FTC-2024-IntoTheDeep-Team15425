@@ -190,7 +190,7 @@ public class Autonomous4 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d initialPose = new Pose2d(-60, -36, 0);
+        Pose2d initialPose = new Pose2d(-60, -24, 0);
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         double chamberLength = 27.5;
         double robotWidth = 12.375/2;
@@ -204,7 +204,7 @@ public class Autonomous4 extends LinearOpMode {
 //                //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
 //                .splineToLinearHeading(new Pose2d(ascentZoneLength/2 + robotWidth, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI)
 //                .splineToLinearHeading(new Pose2d(ascentZoneLength/4, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI);
-        TrajectoryActionBuilder driveAction = drive.actionBuilder(new Pose2d(-60, -36, 0))
+        TrajectoryActionBuilder driveAction = drive.actionBuilder(new Pose2d(-60, -24, 0))
                 .setTangent(Math.PI/2)
                 .splineToLinearHeading(new Pose2d(-(ascentZoneLength/2 + robotWidth - 5) - offset, -(chamberLength/4), -Math.PI/2), 0);
         TrajectoryActionBuilder driveAction2 = drive.actionBuilder(new Pose2d(-(ascentZoneLength/2 + robotWidth + 2), -(chamberLength/4), -Math.PI/2))

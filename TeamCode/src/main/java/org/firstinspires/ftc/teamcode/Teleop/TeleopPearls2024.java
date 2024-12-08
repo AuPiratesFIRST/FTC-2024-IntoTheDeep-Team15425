@@ -38,7 +38,8 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
         ElapsedTime timer = new ElapsedTime();
         boolean timerIsActivated = false;
 
-
+        boolean hasToggledSpeed = false;
+        boolean toggledSpeed = false;
 
         int startPos = 0;
 
@@ -59,16 +60,21 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
         String currentPivotPos = "Stow";
 
         double deadBand = 0.05;
+        boolean isInit = false;
 
         initHardware(); // inits hardware
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        intakeSubmersibleModule.moveSubCRServo(subCRServoStowPos);
 
         waitForStart();
         //matchTime.reset();
 
         while (opModeIsActive()) {
+            if (!isInit) {
+                intakeSubmersibleModule.moveSubCRServo(subCRServoStowPos);
+                isInit = true;
+            }
+
             double time = timer.seconds();
 
             //climbing
@@ -205,7 +211,7 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
             }
             else if (snatchStage == 1) {
                 intakeSubmersibleModule.moveSubMotorTicks(subExtendedPos, subMotorPower);
-                intakeSubmersibleModule.moveSubCRServo(GROUND_POS);
+                intakeSubmersibleModule.moveSubCRServo(GROUND_POS_UNEXTENDED);
                 currentPivotPos = "Ground";
                 if (Math.abs(intakeSubmersibleModule.subMotorTicks()) > Math.abs(subMotorStowPos)) {
                     snatchStage = 2;
@@ -295,8 +301,20 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
             }
 
             //driving
+            if (gamepad1.a && !hasToggledSpeed) {
+                hasToggledSpeed = true;
+                if (toggledSpeed) {
+                    toggledSpeed = false;
+                }
+                else {
+                    toggledSpeed = true;
+                }
+            }
+            else {
+                hasToggledSpeed = false;
+            }
             drivingModule.updateAngle();
-            drivingModule.driveTheMotors(gamepad1.right_stick_x, gamepad1.right_stick_y, gamepad1.left_stick_x, gamepad1.left_stick_y);
+            drivingModule.driveTheMotors(gamepad1.right_stick_x, gamepad1.right_stick_y, gamepad1.left_stick_x, gamepad1.left_stick_y, toggledSpeed);
             if (gamepad1.b) {
                 drivingModule.resetAngle();
             }

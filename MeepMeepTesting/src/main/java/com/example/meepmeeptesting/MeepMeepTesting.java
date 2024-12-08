@@ -40,7 +40,7 @@ public class MeepMeepTesting {
 //            .splineToLinearHeading(new Pose2d(ascentZoneLength/2 + robotWidth, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI)
 //            .splineToLinearHeading(new Pose2d(ascentZoneLength/4, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI)
             .build());
-        myBot2.runAction(myBot.getDrive().actionBuilder(new Pose2d(-60, -36, 0))
+        myBot2.runAction(myBot.getDrive().actionBuilder(new Pose2d(-60, -24, 0))
                         .setTangent(Math.PI/2)
                 .splineToLinearHeading(new Pose2d(-(ascentZoneLength/2 + robotWidth - 5) - 2, -(chamberLength/4), -Math.PI/2), 0)
 
