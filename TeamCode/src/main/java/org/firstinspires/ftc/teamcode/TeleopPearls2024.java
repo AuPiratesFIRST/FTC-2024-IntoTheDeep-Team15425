@@ -1,35 +1,21 @@
-package org.firstinspires.ftc.teamcode.Teleop;
+package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+
 @TeleOp(name = "CompetitionTeleop", group = "IntoTheDeep2024")
 
 @Config
 public class TeleopPearls2024 extends Base { // extends base instead of linearopmode 
-    public static double GROUND_POS_UNEXTENDED = -0.9;
-    public static double GROUND_POS = -0.8;
-    public static double climbingPower = 0.6;
-    public static double subMotorPower = 0.6;
-    public static double climbingPressurePower = 0.3;
-    public static double climbingRightServoOpenPos = 0.35;
-    public static double climbingRightServoClosePos = 0.18;
-    public static double climbingLeftServoOpenPos = 0.3;
-    public static double climbingLeftServoClosePos = 0.48;
-    public static double waitToGround = 0.5;
-    public static double waitToRelease = 1;
-    public static double waitToClose = 1.3;
-    public static double waitToStow = 1.7;
-    public static double motorPower = -0.2;
-
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         //init variables
         int climbingUpPos = 1555;
-        int climbingPressurePos = 500;
+        //double climbingPressurePos = Constants.GROUND_POS;
         int climbingSpecimenHangPos = 1125;
         double doubleRestingPos = (double)climbingUpPos * 0.35;
         int intRestingPos = (int)doubleRestingPos;
@@ -85,7 +71,7 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                 if (doDownPos != 0) {
                     doDownPos = 0;
                 }
-                climbingModule.moveClimbingMotorTicks(climbingUpPos, climbingPower);
+                climbingModule.moveClimbingMotorTicks(climbingUpPos, Constants.climbingPower);
             }
             else if(gamepad2.dpad_down) {
                 if (doRestingPos != 0) {
@@ -93,7 +79,7 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                 }
                 if(doDownPos == 0) {
                     doDownPos = 1;
-                    climbingModule.moveClimbingMotorTicks(startPos, climbingPower);
+                    climbingModule.moveClimbingMotorTicks(startPos, Constants.climbingPower);
                 }
                 else if(doDownPos == 2) {
                     doDownPos = 3;
@@ -104,16 +90,16 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                 if (doRestingPos != 0) {
                     doRestingPos = 0;
                 }
-                climbingModule.moveClimbingMotorTicks(climbingSpecimenHangPos, climbingPower);
+                climbingModule.moveClimbingMotorTicks(climbingSpecimenHangPos, Constants.climbingPower);
                 if (climbingModule.climbingMotorTicks() < climbingSpecimenHangPos + 20) {
-                    climbingModule.setLeftServo(climbingLeftServoOpenPos);
-                    climbingModule.setRightServo(climbingRightServoOpenPos);
+                    climbingModule.setLeftServo(Constants.climbingLeftServoOpenPos);
+                    climbingModule.setRightServo(Constants.climbingRightServoOpenPos);
                 }
             }
             else if(gamepad2.dpad_left) {
                 if(doRestingPos == 0) {
                     doRestingPos = 1;
-                    climbingModule.moveClimbingMotorTicks(intRestingPos, climbingPower);
+                    climbingModule.moveClimbingMotorTicks(intRestingPos, Constants.climbingPower);
                 }
                 if(doRestingPos == 2) {
                     doRestingPos = 3;
@@ -129,7 +115,7 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                 if (doDownPos != 0) {
                     doDownPos = 0;
                 }
-                climbingModule.moveClimbingMotorTicks(climbingUpPos, climbingPower);
+                climbingModule.moveClimbingMotorTicks(climbingUpPos, Constants.climbingPower);
             }
             else if(gamepad1.dpad_down) {
                 if (doRestingPos != 0) {
@@ -137,7 +123,7 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                 }
                 if(doDownPos == 0) {
                     doDownPos = 1;
-                    climbingModule.moveClimbingMotorTicks(startPos, climbingPower);
+                    climbingModule.moveClimbingMotorTicks(startPos, Constants.climbingPower);
                 }
                 else if(doDownPos == 2) {
                     doDownPos = 3;
@@ -148,12 +134,12 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                 if (doRestingPos != 0) {
                     doRestingPos = 0;
                 }
-                climbingModule.moveClimbingMotorTicks(climbingSpecimenHangPos, climbingPower);
+                climbingModule.moveClimbingMotorTicks(climbingSpecimenHangPos, Constants.climbingPower);
             }
             else if(gamepad1.dpad_left) {
                 if(doRestingPos == 0) {
                     doRestingPos = 1;
-                    climbingModule.moveClimbingMotorTicks(intRestingPos, climbingPower);
+                    climbingModule.moveClimbingMotorTicks(intRestingPos, Constants.climbingPower);
                 }
                 if(doRestingPos == 2) {
                     doRestingPos = 3;
@@ -175,10 +161,10 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                     doDownPos = 2;
                 }
                 if (doRestingPos == 2) {
-                    climbingModule.moveClimbingMotorTicks(intRestingPos, climbingPower);
+                    climbingModule.moveClimbingMotorTicks(intRestingPos, Constants.climbingPower);
                 }
                 else if (doDownPos == 2) {
-                    climbingModule.moveClimbingMotorTicks(startPos, climbingPower);
+                    climbingModule.moveClimbingMotorTicks(startPos, Constants.climbingPower);
                 }
                 else{
                     climbingModule.stopClimbingMotor();
@@ -187,22 +173,22 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
 
             //bumpers
             if (gamepad2.left_bumper) {
-                climbingModule.setRightServo(climbingRightServoOpenPos);
-                climbingModule.setLeftServo(climbingLeftServoOpenPos);
+                climbingModule.setRightServo(Constants.climbingRightServoOpenPos);
+                climbingModule.setLeftServo(Constants.climbingLeftServoOpenPos);
             }
             else if (gamepad2.right_bumper) {
-                climbingModule.setRightServo(climbingRightServoClosePos);
-                climbingModule.setLeftServo(climbingLeftServoClosePos);
+                climbingModule.setRightServo(Constants.climbingRightServoClosePos);
+                climbingModule.setLeftServo(Constants.climbingLeftServoClosePos);
             }
             else {
                 climbingModule.servosFreeze();
             }
 
             if (gamepad1.back) {
-                climbingModule.resetMotor(motorPower);
+                climbingModule.resetMotor(Constants.motorPower);
             }
             else if (gamepad2.back) {
-                climbingModule.resetMotor(motorPower);
+                climbingModule.resetMotor(Constants.motorPower);
             }
 
             //automated snatching of sample
@@ -210,8 +196,8 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                 snatchStage = 1;
             }
             else if (snatchStage == 1) {
-                intakeSubmersibleModule.moveSubMotorTicks(subExtendedPos, subMotorPower);
-                intakeSubmersibleModule.moveSubCRServo(GROUND_POS_UNEXTENDED);
+                intakeSubmersibleModule.moveSubMotorTicks(subExtendedPos, Constants.subMotorPower);
+                intakeSubmersibleModule.moveSubCRServo(Constants.GROUND_POS_UNEXTENDED);
                 currentPivotPos = "Ground";
                 if (Math.abs(intakeSubmersibleModule.subMotorTicks()) > Math.abs(subMotorStowPos)) {
                     snatchStage = 2;
@@ -219,7 +205,7 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
             }
             else if (snatchStage == 2) {
                 intakeSubmersibleModule.setServos(subClawServosOpenPos);
-                if (intakeSubmersibleModule.servosAtPosition(subClawServosOpenPos, subServosDeadBand) && intakeSubmersibleModule.motor.getCurrentPosition() > subExtendedPos - intakeDeadBand && intakeSubmersibleModule.motor.getCurrentPosition() < subExtendedPos + intakeDeadBand) {
+                if (intakeSubmersibleModule.servosAtPosition(subClawServosOpenPos, subServosDeadBand) && intakeSubmersibleModule.subMotorTicks() > subExtendedPos - intakeDeadBand && intakeSubmersibleModule.subMotorTicks() < subExtendedPos + intakeDeadBand) {
                     snatchStage = 3;
                 }
             }
@@ -230,10 +216,10 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                 }
             }
             else if (snatchStage == 4) {
-                intakeSubmersibleModule.moveSubMotorTicks(subMotorStowPos, subMotorPower);
+                intakeSubmersibleModule.moveSubMotorTicks(subMotorStowPos, Constants.subMotorPower);
                 intakeSubmersibleModule.moveSubCRServo(subCRServoStowPos);
                 currentPivotPos = "Stow";
-                if (intakeSubmersibleModule.motor.getCurrentPosition() > subMotorStowPos - intakeDeadBand && intakeSubmersibleModule.motor.getCurrentPosition() < subMotorStowPos + intakeDeadBand) {
+                if (intakeSubmersibleModule.subMotorTicks() > subMotorStowPos - intakeDeadBand && intakeSubmersibleModule.subMotorTicks() < subMotorStowPos + intakeDeadBand) {
                     snatchStage = 0;
                 }
             }
@@ -242,30 +228,30 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                 intakeSubmersibleModule.setServos(subClawServosClosePos);
                 intakeSubmersibleModule.moveSubCRServo(subCRServoStowPos);
                 currentPivotPos = "Stow";
-                intakeSubmersibleModule.moveSubMotorTicks(subMotorStowPos, subMotorPower);
+                intakeSubmersibleModule.moveSubMotorTicks(subMotorStowPos, Constants.subMotorPower);
             }
             //automated casting out
             else if (gamepad2.y && climbingModule.climbingMotorTicks() > 200) {
-                intakeSubmersibleModule.moveSubCRServo(GROUND_POS);
+                intakeSubmersibleModule.moveSubCRServo(Constants.GROUND_POS);
                 currentPivotPos = "Ground";
-                intakeSubmersibleModule.moveSubMotorTicks(subExtendedPos, subMotorPower);
+                intakeSubmersibleModule.moveSubMotorTicks(subExtendedPos, Constants.subMotorPower);
             }
             else if (gamepad2.x && climbingModule.climbingMotorTicks() > 200) {
                 if (!timerIsActivated) {
                     timerIsActivated = true;
                     timer.reset();
                 }
-                else if (time <= waitToGround) {
-                    intakeSubmersibleModule.moveSubCRServo(GROUND_POS_UNEXTENDED);
+                else if (time <= Constants.waitToGround) {
+                    intakeSubmersibleModule.moveSubCRServo(Constants.GROUND_POS_UNEXTENDED);
                     currentPivotPos = "Ground";
                 }
-                else if (time <= waitToRelease) {
+                else if (time <= Constants.waitToRelease) {
                     intakeSubmersibleModule.setServos(subClawServosOpenPos);
                 }
-                else if (time <= waitToClose) {
+                else if (time <= Constants.waitToClose) {
                     intakeSubmersibleModule.setServos(subClawServosClosePos);
                 }
-                else if (time <= waitToStow) {
+                else if (time <= Constants.waitToStow) {
                     intakeSubmersibleModule.moveSubCRServo(subCRServoStowPos);
                     currentPivotPos = "Stow";
                 }
@@ -277,7 +263,7 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
                 currentPivotPos = "Stow";
             }
             else if (gamepad2.right_stick_y < -0.2 && climbingModule.climbingMotorTicks() > 200) {
-                intakeSubmersibleModule.moveSubCRServo(GROUND_POS_UNEXTENDED);
+                intakeSubmersibleModule.moveSubCRServo(Constants.GROUND_POS_UNEXTENDED);
                 currentPivotPos = "Ground";
             }
             //claw
@@ -325,8 +311,8 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
             telemetry.addData("Sub Motor Position: ", intakeSubmersibleModule.subMotorTicks());
             //telemetry.addData("Heading: ", drivingModule.angle);
             telemetry.addData("AdjustedHeading: ", adjustedHeading);
-            telemetry.addData("Right Servo Sub Pos", intakeSubmersibleModule.rightServo.getPosition());
-            telemetry.addData("Left Servo Sub Pos", intakeSubmersibleModule.leftServo.getPosition());
+            //telemetry.addData("Right Servo Sub Pos", intakeSubmersibleModule.rightServo.getPosition());
+            //telemetry.addData("Left Servo Sub Pos", intakeSubmersibleModule.leftServo.getPosition());
            // telemetry.addData("right trigger", gamepad2.right_trigger);
             //telemetry.addData("left trigger", gamepad2.left_trigger);
             telemetry.addData("restPos", doRestingPos);
@@ -336,7 +322,7 @@ public class TeleopPearls2024 extends Base { // extends base instead of linearop
             telemetry.addData("snatch stage", snatchStage);
             telemetry.addData("servoIsOpen", intakeSubmersibleModule.servosAtPosition(subClawServosOpenPos, subServosDeadBand));
             telemetry.addData("servoIsClosed", intakeSubmersibleModule.servosAtPosition(subClawServosClosePos, subServosDeadBand));
-            telemetry.addData("motorIsExtended", intakeSubmersibleModule.motor.getCurrentPosition() > subExtendedPos - intakeDeadBand && intakeSubmersibleModule.motor.getCurrentPosition() < subExtendedPos + intakeDeadBand);
+            telemetry.addData("motorIsExtended", intakeSubmersibleModule.subMotorTicks() > subExtendedPos - intakeDeadBand && intakeSubmersibleModule.subMotorTicks() < subExtendedPos + intakeDeadBand);
 //            telemetry.addData("time", time);
 //            telemetry.addData("timerIsActivated", timerIsActivated);
 //            telemetry.addData("x", gamepad2.x);
