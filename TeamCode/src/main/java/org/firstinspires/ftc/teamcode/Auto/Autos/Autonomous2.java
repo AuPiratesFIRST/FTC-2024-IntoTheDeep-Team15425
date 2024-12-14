@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Auto.Autos;
+
 import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
@@ -12,12 +14,12 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Auto.MecanumDrive;
-import org.firstinspires.ftc.teamcode.Base;
+import org.firstinspires.ftc.teamcode.BaseConfig;
 import org.firstinspires.ftc.teamcode.Constants;
 
 @Config
 @Autonomous(name = "AllLeftAuto(Ascent)", group = "Autonomous")
-public class Autonomous2 extends Base {
+public class Autonomous2 extends BaseConfig {
     public static double offset = 1;
     public static double offset2 = -15;
 
@@ -29,11 +31,11 @@ public class Autonomous2 extends Base {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    climbingModule.moveClimbingMotorTicks(1550, 0.6);
+                    climbingSubsystemModule.moveClimbingMotorTicks(1550, 0.6);
                     initialized = true;
                 }
 
-                double pos = climbingModule.climbingMotorTicks();
+                double pos = climbingSubsystemModule.climbingMotorTicks();
                 packet.put("climbingMotorPos", pos);
                 telemetry.addData("Climbing Pos", pos);
                 telemetry.update();
@@ -44,6 +46,7 @@ public class Autonomous2 extends Base {
                 }
             }
         }
+
         public Action climbingMotorUp() {
             return new ClimbingUp();
         }
@@ -55,11 +58,11 @@ public class Autonomous2 extends Base {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    climbingModule.moveClimbingMotorTicks(0, 0.6);
+                    climbingSubsystemModule.moveClimbingMotorTicks(0, 0.6);
                     initialized = true;
                 }
 
-            double pos = climbingModule.climbingMotorTicks();
+                double pos = climbingSubsystemModule.climbingMotorTicks();
                 packet.put("climbingMotorPos", pos);
                 telemetry.addData("Climbing Pos", pos);
                 telemetry.update();
@@ -70,7 +73,8 @@ public class Autonomous2 extends Base {
                 }
             }
         }
-        public Action climbingMotorDown(){
+
+        public Action climbingMotorDown() {
             return new ClimbingDown();
         }
 
@@ -81,23 +85,24 @@ public class Autonomous2 extends Base {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    climbingModule.moveClimbingMotorTicks(climbingSpecimenHangPos, 0.6);
+                    climbingSubsystemModule.moveClimbingMotorTicks(climbingSpecimenHangPos, 0.6);
                     initialized = true;
                 }
 
-                double pos = climbingModule.climbingMotorTicks();
+                double pos = climbingSubsystemModule.climbingMotorTicks();
                 packet.put("climbingMotorPos", pos);
                 telemetry.addData("Climbing Pos", pos);
                 telemetry.update();
                 if (!(pos < climbingSpecimenHangPos + 5 && pos > climbingSpecimenHangPos - 5)) {
                     return true;
                 } else {
-                    climbingModule.stopClimbingMotor();
+                    climbingSubsystemModule.stopClimbingMotor();
                     return false;
                 }
             }
         }
-        public Action climbingMotorSpecimenDown(){
+
+        public Action climbingMotorSpecimenDown() {
             return new ClimbingSpecimenDown();
         }
 
@@ -105,25 +110,26 @@ public class Autonomous2 extends Base {
 
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                climbingModule.setRightServo(Constants.climbingRightServoOpenPos);
-                climbingModule.setLeftServo(Constants.climbingLeftServoOpenPos);
+                climbingSubsystemModule.setRightServo(Constants.Climbing.CLIMBING_RIGHT_SERVO_OPEN_POSITION);
+                climbingSubsystemModule.setLeftServo(Constants.Climbing.CLIMBING_LEFT_SERVO_OPEN_POSITION);
                 return false;
             }
         }
 
-        public Action climbingRelease(){
+        public Action climbingRelease() {
             return new ClimbingRelease();
         }
 
         public class ClimbingClose implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                climbingModule.setRightServo(Constants.climbingRightServoOpenPos);
-                climbingModule.setLeftServo(Constants.climbingLeftServoOpenPos);
+                climbingSubsystemModule.setRightServo(Constants.Climbing.CLIMBING_RIGHT_SERVO_OPEN_POSITION);
+                climbingSubsystemModule.setLeftServo(Constants.Climbing.CLIMBING_LEFT_SERVO_OPEN_POSITION);
                 return false;
             }
         }
-        public Action climbingClose(){
+
+        public Action climbingClose() {
             return new ClimbingClose();
         }
 
@@ -166,10 +172,8 @@ public class Autonomous2 extends Base {
         Pose2d initialPose = new Pose2d(-60, 36, 0);
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         double chamberLength = 27.5;
-        double robotWidth = 12.375/2;
+        double robotWidth = 12.375 / 2;
         double ascentZoneLength = 42.75;
-        Climbing climbing = new Climbing();
-
 
 //        TrajectoryActionBuilder driveAction = drive.actionBuilder(initialPose)
 //                .splineToConstantHeading(new Vector2d(ascentZoneLength/2 + robotWidth, chamberLength/4), Math.PI)
@@ -178,16 +182,16 @@ public class Autonomous2 extends Base {
 //                .splineToLinearHeading(new Pose2d(ascentZoneLength/2 + robotWidth, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI)
 //                .splineToLinearHeading(new Pose2d(ascentZoneLength/4, -chamberLength/2 - robotWidth, Math.PI/2), Math.PI);
         TrajectoryActionBuilder driveAction = drive.actionBuilder(new Pose2d(-60, 36, 0))
-                .splineTo(new Vector2d(-(ascentZoneLength/2 + robotWidth - 5) + offset, -(chamberLength/4) ), -Math.PI/2);
+                .splineTo(new Vector2d(-(ascentZoneLength / 2 + robotWidth - 5) + offset, -(chamberLength / 4)), -Math.PI / 2);
 
-        TrajectoryActionBuilder driveAction2 = drive.actionBuilder(new Pose2d(-(ascentZoneLength/2 + robotWidth - 5) + offset, -(chamberLength/4), -Math.PI/2))
+        TrajectoryActionBuilder driveAction2 = drive.actionBuilder(new Pose2d(-(ascentZoneLength / 2 + robotWidth - 5) + offset, -(chamberLength / 4), -Math.PI / 2))
                 //.setTangent(-Math.PI/4)
                 .setTangent(Math.PI)
 
                 //.splineToLinearHeading(new Pose2d(ascentZoneLength/4, -(chamberLength/2 + robotWidth), Math.PI/2), Math.PI)
-                .splineToConstantHeading(new Vector2d(-(ascentZoneLength/2 + robotWidth - 5), 26), Math.PI/2)
-                .splineToConstantHeading(new Vector2d(ascentZoneLength/2 -6, 26), 0)
-                .splineToConstantHeading(new Vector2d(ascentZoneLength/2 -6, -(-14.5 - 12.9/2) + offset2), -Math.PI/2);
+                .splineToConstantHeading(new Vector2d(-(ascentZoneLength / 2 + robotWidth - 5), 26), Math.PI / 2)
+                .splineToConstantHeading(new Vector2d(ascentZoneLength / 2 - 6, 26), 0)
+                .splineToConstantHeading(new Vector2d(ascentZoneLength / 2 - 6, -(-14.5 - 12.9 / 2) + offset2), -Math.PI / 2);
 //                .build());
         //.build();)
 
@@ -198,7 +202,7 @@ public class Autonomous2 extends Base {
 
         // actions that need to happen on init; for instance, a claw tightening.
         //Actions.runBlocking(claw.closeClaw());
-        Actions.runBlocking(climbing.climbingClose());
+        Actions.runBlocking(climbingSubsystemModule.climbingClose());
 
 
 //        while (!isStopRequested() && !opModeIsActive()) {
@@ -217,16 +221,16 @@ public class Autonomous2 extends Base {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        climbing.climbingClose(),
-                        new ParallelAction(climbing.climbingMotorUp(),
+                        climbingSubsystemModule.climbingClose(),
+                        new ParallelAction(climbingSubsystemModule.climbingMotorUp(),
                                 driveAction.build()),
-                        climbing.climbingMotorSpecimenDown(),
-                        climbing.climbingRelease(),
+                        climbingSubsystemModule.climbingMotorSpecimenDown(),
+                        climbingSubsystemModule.climbingRelease(),
                         //climbing.climbingMotorDown()
                         //driveAction2.build(),
-                        new ParallelAction(climbing.climbingMotorUp(),
+                        new ParallelAction(climbingSubsystemModule.climbingMotorUp(),
                                 driveAction2.build())
-                                )
+                )
         );
     }
 }
