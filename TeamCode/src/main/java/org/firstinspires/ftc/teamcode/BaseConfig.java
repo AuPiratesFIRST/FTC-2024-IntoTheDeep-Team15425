@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Teleop;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -8,19 +8,24 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Subsystems.ClawSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.ClimbingSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.DrivingSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.SubmersibleIntakeSubsystem;
 
 import java.util.List;
 import java.util.Locale;
 
-public abstract class Base extends LinearOpMode {
+public abstract class BaseConfig extends LinearOpMode {
 
     // Globally Declared Sensors
 
 
     // Module Classes
-    public Climbing climbingModule = null;
-    public IntakeSubmersible intakeSubmersibleModule = null;
-    public DrivingSystem drivingModule = null;
+    public ClimbingSubsystem climbingSubsystemModule = null;
+    public SubmersibleIntakeSubsystem submersibleIntakeSubsystemModule = null;
+    public DrivingSubsystem drivingModule = null;
+    public ClawSubsystem clawSubsystemModule = null;
 
     // Global Variables
 
@@ -70,11 +75,10 @@ public abstract class Base extends LinearOpMode {
         Servo rightClimbingServo = hardwareMap.get(Servo.class, "Climbing Right Servo");
         Servo leftClimbingServo = hardwareMap.get(Servo.class, "Climbing Left Servo");
 
-
         // Init Module class
-        climbingModule = new Climbing(climbingMotor, rightClimbingServo, leftClimbingServo);
-        intakeSubmersibleModule = new IntakeSubmersible(subMotor, pivotCRServo, rightSubServo, leftSubServo);
-        drivingModule = new DrivingSystem(imu, rightFront, leftFront, rightBack, leftBack);
+        climbingSubsystemModule = new ClimbingSubsystem(climbingMotor, rightClimbingServo, leftClimbingServo, telemetry);
+        submersibleIntakeSubsystemModule = new SubmersibleIntakeSubsystem(subMotor, pivotCRServo, rightSubServo, leftSubServo);
+        drivingModule = new DrivingSubsystem(imu, rightFront, leftFront, rightBack, leftBack);
     }
 
     //Utility Functions
